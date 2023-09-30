@@ -1,4 +1,6 @@
 from p2sh import p2sh
+from p2wsh import p2wsh
+from p2wsh_over_p2sh import p2wsh_over_p2sh
 import logging
 import coloredlogs
 import sys
@@ -54,10 +56,10 @@ def main():
             p2sh(logger)
         elif choice == 2:
             print("Executing P2WSH")
-            p2sh(logger)
+            p2wsh(logger)
         elif choice == 3:
             print("Executing P2WSH over P2SH")
-            p2sh(logger)
+            p2wsh_over_p2sh(logger)
         else:
             raise Exception("Invalid Choice")
     except Exception as e:
