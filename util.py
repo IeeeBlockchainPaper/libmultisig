@@ -202,3 +202,13 @@ def test_transaction(node, tx):
     ret = node.testmempoolaccept(rawtxs=[tx_str], maxfeerate=0)[0]
     print(ret)
     return ret['allowed']
+
+def propmt_musig_options():
+    print("Please select one of the following options")
+    print("Please enter 1 for Key Path spending")
+    print("Please enter 2 for Scriptp Path spending")
+    choice = int(input("Input: "))
+    print("")
+    if choice > 2 or choice < 1:
+        raise Exception("Invalid Choice")
+    return choice
