@@ -10,6 +10,7 @@ from p2tr_musig_option_1 import p2tr_musig_option_1
 from p2tr_musig_option_2 import p2tr_musig_option_2
 from p2tr_musig_option_3 import p2tr_musig_option_3
 from p2tr_musig_option_4 import p2tr_musig_option_4
+from p2tr_musig_option_5 import p2tr_musig_option_5
 
 
 logging.basicConfig()
@@ -92,7 +93,7 @@ def main():
                 p2tr_musig_option_4(logger)
             elif choice == 5:
                 print("Executing P2WSH")
-                p2wsh(logger)
+                p2tr_musig_option_5(logger)
             elif choice == 6:
                 print("Executing P2WSH")
                 p2wsh(logger)

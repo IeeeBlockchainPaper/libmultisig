@@ -206,7 +206,7 @@ def test_transaction(node, tx):
 def propmt_musig_options():
     print("Please select one of the following options")
     print("Please enter 1 for Key Path spending")
-    print("Please enter 2 for Scriptp Path spending")
+    print("Please enter 2 for Script Path spending")
     choice = int(input("Input: "))
     print("")
     if choice > 2 or choice < 1:
