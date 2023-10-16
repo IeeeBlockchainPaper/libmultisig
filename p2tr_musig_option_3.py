@@ -2,7 +2,7 @@
 from io import BytesIO
 import random
 import util
-from test_framework.key import generate_key_pair, generate_bip340_key_pair, generate_schnorr_nonce, ECKey, ECPubKey, SECP256K1_FIELD_SIZE, SECP256K1, SECP256K1_ORDER
+from test_framework.key import generate_key_pair, generate_bip340_key_pair_from_xprv, generate_bip340_key_pair, generate_schnorr_nonce, ECKey, ECPubKey, SECP256K1_FIELD_SIZE, SECP256K1, SECP256K1_ORDER
 from test_framework.musig import aggregate_musig_signatures, aggregate_schnorr_nonces, generate_musig_key, musig_digest, sign_musig
 from test_framework.script import *
 from test_framework.address import program_to_witness
@@ -44,8 +44,12 @@ def p2tr_musig_option_3(logger=False):
         privkeys = list()
         pubkeys = list()
 
-        for _ in range(n):
-            _privkey, _pubkey = generate_key_pair()
+        for i in range(n):
+            _xprivkey = input(f"Enter extended private key for cosigner {i+1}:")
+            _path = input(f"Enter the derivation path for cosigner {i+1}. If you are not sure what this is, leave this field unchanged.")
+            if(len(_path) == 0):
+                _path = "m//86'/1'/0'/0/{}".format(i+1)
+            _privkey, _pubkey = generate_bip340_key_pair_from_xprv(_xprivkey,_path)
             privkeys.append(_privkey)
             pubkeys.append(_pubkey)
         keys = list(zip(pubkeys, privkeys))
@@ -53,7 +57,7 @@ def p2tr_musig_option_3(logger=False):
         print(f"\nFollowing are the generated {n} public and private keys.", end='\n\n')
         for idx, pk, privk in zip([i + 1 for i in range(n)], pubkeys, privkeys):
             print(f"Public Key {idx}: {pk}")
-            print(f"Private Key {idx}: {privk}")
+            # print(f"Private Key {idx}: {privk}")
             print(f"Size of Public Key {idx} is: {len(pk.get_bytes())} bytes", end='\n\n')
 
         c_map, musig_agg = generate_musig_key(pubkeys)
@@ -67,7 +71,7 @@ def p2tr_musig_option_3(logger=False):
                 privkeys_c[i].negate()
 
         print("MuSig pubkey: {}".format(musig_agg.get_bytes().hex()))
-
+        print(f"Size of Aggregated Public Key is: {len(musig_agg.get_bytes())} bytes", end='\n\n')
         combs = list(combinations(keys, m))
         updated_combs = list()
         tapscripts = list()

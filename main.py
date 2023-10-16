@@ -6,11 +6,13 @@ import traceback
 from p2sh import p2sh
 from p2wsh import p2wsh
 from p2wsh_over_p2sh import p2wsh_over_p2sh
-from p2tr_musig_option_1 import p2tr_musig_option_1
+# from p2tr_musig_option_1 import p2tr_musig_option_1
+from p2tr_musig_option_1_copy import p2tr_musig_option_1_copy
 from p2tr_musig_option_2 import p2tr_musig_option_2
 from p2tr_musig_option_3 import p2tr_musig_option_3
 from p2tr_musig_option_4 import p2tr_musig_option_4
 from p2tr_musig_option_5 import p2tr_musig_option_5
+from p2tr_musig_option_6 import p2tr_musig_option_6
 
 
 logging.basicConfig()
@@ -74,14 +76,13 @@ def main():
             print("Please enter 3 for choice 3")
             print("Please enter 4 for choice 4")
             print("Please enter 5 for choice 5")
-            print("Please enter 6 for choice 6")
             choice = int(input("Input: "))
             print("")
             if choice > 6 or choice < 1:
                 raise Exception("Invalid Choice")
             if choice == 1:
                 print("Executing P2SH M of N")
-                p2tr_musig_option_1(logger)
+                p2tr_musig_option_1_copy(logger)
             elif choice == 2:
                 print("Executing P2WSH")
                 p2tr_musig_option_2(logger)
@@ -94,9 +95,9 @@ def main():
             elif choice == 5:
                 print("Executing P2WSH")
                 p2tr_musig_option_5(logger)
-            elif choice == 6:
-                print("Executing P2WSH")
-                p2wsh(logger)
+            # elif choice == 6:
+            #     print("Executing P2WSH")
+            #     p2tr_musig_option_6(logger)
         else:
             raise Exception("Invalid Choice")
     except Exception as e:

@@ -1,7 +1,7 @@
 # Imports
 import util
 from test_framework.address import program_to_witness
-from test_framework.key import generate_key_pair, generate_bip340_key_pair, generate_schnorr_nonce
+from test_framework.key import generate_key_pair, generate_key_pair_from_xprv, generate_bip340_key_pair, generate_schnorr_nonce
 from test_framework.messages import CTxInWitness, sha256
 from test_framework.musig import aggregate_musig_signatures, aggregate_schnorr_nonces, generate_musig_key, sign_musig
 from test_framework.script import *
@@ -39,15 +39,19 @@ def p2wsh_over_p2sh(logger=False):
         privkeys = list()
         pubkeys = list()
 
-        for _ in range(n):
-            _privkey, _pubkey = generate_key_pair()
+        for i in range(n):
+            _xprivkey = input(f"Enter extended private key for cosigner {i+1}:")
+            _path = input(f"Enter the derivation path for cosigner {i+1}. If you are not sure what this is, leave this field unchanged.")
+            if(len(_path) == 0):
+                _path = "m//49'/1'/0'/0/{}".format(i+1)
+            _privkey, _pubkey = generate_key_pair_from_xprv(_xprivkey,_path)
             privkeys.append(_privkey)
             pubkeys.append(_pubkey)
 
         print(f"\nFollowing are the generated {n} public and private keys.", end='\n\n')
         for idx, pk, privk in zip([i + 1 for i in range(n)], pubkeys, privkeys):
             print(f"Public Key {idx}: {pk}")
-            print(f"Private Key {idx}: {privk}")
+            # print(f"Private Key {idx}: {privk}")
             print(f"Size of Public Key {idx} is: {len(pk.get_bytes())} bytes", end='\n\n')
 
         

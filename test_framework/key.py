@@ -8,6 +8,8 @@ keys, and is trivially vulnerable to side channel attacks. Do not use for
 anything but tests."""
 import random
 import hashlib
+from bitcoinutils.hdwallet import HDWallet
+from bitcoinutils.schnorr import int_from_bytes, bytes_from_int, point_mul, bytes_from_point
 
 def TaggedHash(tag, data):
     ss = hashlib.sha256(tag.encode('utf-8')).digest()
@@ -680,3 +682,27 @@ def generate_schnorr_nonce():
     k_key = ECKey()
     k_key.set(k.to_bytes(32, 'big'), True)
     return k_key
+
+def generate_bip340_key_pair_from_xprv(xprivkey,path):
+    hdw = HDWallet(xprivkey, path)
+    from_priv = hdw.get_private_key()
+    from_pub = from_priv.get_public_key()
+    from_Priv_ECKey = ECKey()
+    from_Priv_ECKey.set(from_priv.to_bytes())
+    from_pub_ECPubKey = from_Priv_ECKey.get_pubkey()
+    if not from_pub.is_y_even():
+        # print("false")
+        from_Priv_ECKey.negate()
+        from_pub_ECPubKey = from_Priv_ECKey.get_pubkey()
+    return from_Priv_ECKey, from_pub_ECPubKey
+    # from_addr = from_pub.get_address()
+    #print("keys and address:", from_Priv_ECKey, from_pub_ECPubKey)
+
+def generate_key_pair_from_xprv(xprivkey,path):
+    hdw = HDWallet(xprivkey, path)
+    from_priv = hdw.get_private_key()
+    from_pub = from_priv.get_public_key()
+    from_Priv_ECKey = ECKey()
+    from_Priv_ECKey.set(from_priv.to_bytes())
+    from_pub_ECPubKey = from_Priv_ECKey.get_pubkey()
+    return from_Priv_ECKey, from_pub_ECPubKey
